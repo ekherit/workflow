@@ -1,0 +1,20 @@
+name: fetch
+on: workflow_dispatch
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: curl IPv4 on 443 (HTTP over 443)
+        run: |
+          set -x
+          curl -4 -v --max-time 90 --speed-time 20 \
+               -o /dev/null \
+               -w '\nHTTP:%{http_code} BYTES:%{size_download} SPEED:%{speed_download}B/s\n' \
+               http://38.242.202.196:443/file.tar.gz
+      - name: curl IPv4 on 10443 (if you expose it)
+        run: |
+          curl -4 -vk --max-time 90 --speed-time 20 \
+               -o /dev/null \
+               -w '\nHTTP:%{http_code} BYTES:%{size_download} SPEED:%{speed_download}B/s\n' \
+               https://38.242.202.196:10443/file.tar.gz || true
+
